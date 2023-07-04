@@ -21,6 +21,9 @@
 #' boot_result <- reg_bootstrap(data)
 #' bootsummer(boot_result)
 bootsummer <- function(dens, lb = 0.025, ub = 0.975){
+
+  if(methods::is(dens)[[1]] != "density")stop("dens must be an object of class density.")
+
   # Mode
   mode <- dens$x[which.max(dens$y)]
 

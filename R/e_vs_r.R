@@ -33,12 +33,13 @@ e_vs_r <- function(data, n_bootstraps = 10000, check_size = TRUE,
   reg_result <- reg_bootstrap(data, n_bootstraps, anon)
 
   # Summarize results
-  exact_summary <- bootsummer(exact_result, lb, ub)
-  reg_summary <- bootsummer(reg_result, lb, ub)
+  exact_summary <- bootsummer(exact_result, lb = lb, ub = ub)
+  reg_summary <- bootsummer(reg_result, lb = lb, ub = ub)
 
   # Create summary table
-  summary_table <- rbind(exact_summary, reg_summary)
-  rownames(summary_table) <- c("Exact_bootstrap", "Regular_bootstrap")
+  summary_table <- as.data.frame(rbind(exact_summary, reg_summary))
+  summary_table$Method <- c("Exact_bootstrap", "Regular_bootstrap")
+  summary_table <- summary_table[, c(5, 1:4)]
 
   # Plot comparison
   comp_plot <- compare_bootstrap(exact_result, reg_result)

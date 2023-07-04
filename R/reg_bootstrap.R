@@ -21,6 +21,8 @@
 reg_bootstrap <- function(data, n_bootstraps = 10000, anon = function(x)(mean(x))) {
   n <- length(data)
 
+  if(!(is.vector(data) & is.numeric(data))) stop("data should be a numeric vector.")
+
   # Generate the bootstrap samples and compute the statistics.
   bootstrap_stats <- replicate(n_bootstraps, anon(sample(data, n, replace = TRUE)))
 
