@@ -13,7 +13,8 @@ URL: https://github.com/mightymetrika/exactamente
 BugReports: https://github.com/mightymetrika/exactamente/issues
 Imports: 
     ggplot2,
-    methods
+    methods,
+    shiny
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

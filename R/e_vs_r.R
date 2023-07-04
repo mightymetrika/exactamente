@@ -26,7 +26,7 @@
 #' print(results$summary_table)
 #' print(results$comp_plot)
 e_vs_r <- function(data, n_bootstraps = 10000, check_size = TRUE,
-                   anon = function(x)(mean(x)), lb = 0.025, ub = 0.975) {
+anon = function(x)(mean(x)), lb = 0.025, ub = 0.975) {
 
   # Run both bootstrap functions
   exact_result <- exact_bootstrap(data, n_bootstraps, check_size, anon)
@@ -39,7 +39,7 @@ e_vs_r <- function(data, n_bootstraps = 10000, check_size = TRUE,
   # Create summary table
   summary_table <- as.data.frame(rbind(exact_summary, reg_summary))
   summary_table$Method <- c("Exact_bootstrap", "Regular_bootstrap")
-  summary_table <- summary_table[, c(5, 1:4)]
+  summary_table <- summary_table[, c(6, 1:2, 3, 4, 5)]
 
   # Plot comparison
   comp_plot <- compare_bootstrap(exact_result, reg_result)
@@ -51,3 +51,29 @@ e_vs_r <- function(data, n_bootstraps = 10000, check_size = TRUE,
   # Return output
   return(out)
 }
+# e_vs_r <- function(data, n_bootstraps = 10000, check_size = TRUE,
+#                    anon = function(x)(mean(x)), lb = 0.025, ub = 0.975) {
+#
+#   # Run both bootstrap functions
+#   exact_result <- exact_bootstrap(data, n_bootstraps, check_size, anon)
+#   reg_result <- reg_bootstrap(data, n_bootstraps, anon)
+#
+#   # Summarize results
+#   exact_summary <- bootsummer(exact_result, lb = lb, ub = ub)
+#   reg_summary <- bootsummer(reg_result, lb = lb, ub = ub)
+#
+#   # Create summary table
+#   summary_table <- as.data.frame(rbind(exact_summary, reg_summary))
+#   summary_table$Method <- c("Exact_bootstrap", "Regular_bootstrap")
+#   summary_table <- summary_table[, c(5, 1:4)]
+#
+#   # Plot comparison
+#   comp_plot <- compare_bootstrap(exact_result, reg_result)
+#
+#   # Store output in a list
+#   out <- list(summary_table = summary_table,
+#               comp_plot = comp_plot)
+#
+#   # Return output
+#   return(out)
+# }
