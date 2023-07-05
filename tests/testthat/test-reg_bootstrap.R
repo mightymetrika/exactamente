@@ -3,9 +3,10 @@ test_that("reg_bootstrap works correctly with a valid input", {
   set.seed(123)
   data <- rnorm(5)
   result <- reg_bootstrap(data)
+  expect_s3_class(result, "regboot")
   expect_type(result, "list")
   expect_named(result$dens, c("x", "y", "bw", "n", "call", "data.name","has.na" ))
-  expect_named(result$stats, c("mode", "mean", "sd", "lCI", "uCI"))
+  expect_named(result$stats, c("mode", "median", "mean", "sd", "lCI", "uCI"))
 })
 
 # Test 2: `n_bootstraps` and `anon` parameters
@@ -32,3 +33,52 @@ test_that("`lb` and `ub` parameters modify the result", {
   expect_true(any(result1$stats$lCI != result2$stats$lCI))
   expect_true(any(result1$stats$uCI != result2$stats$uCI))
 })
+
+# Test 5: `density_args` parameter
+test_that("`density_args` works correctly", {
+  set.seed(123)
+  data <- rnorm(5)
+  result <- reg_bootstrap(data, density_args = list(kernel = "cosine"))
+  expect_type(result, "list")
+  expect_named(result$dens, c("x", "y", "bw", "n", "call", "data.name","has.na"))
+  expect_named(result$stats, c("mode", "median", "mean", "sd", "lCI", "uCI"))
+})
+
+# Test 6: Plot method
+test_that("plot method works correctly with a valid input", {
+  set.seed(123)
+  data <- rnorm(5)
+  reg_bootstrap_result <- reg_bootstrap(data)
+  result_exact <- plot(reg_bootstrap_result)
+  expect_s3_class(result_exact, c("gg", "ggplot"))
+})
+
+# Test 7: Summary method
+test_that("plot method works correctly with a valid input", {
+  set.seed(123)
+  data <- rnorm(5)
+  reg_bootstrap_result <- reg_bootstrap(data)
+  result_exact <- summary(reg_bootstrap_result)
+  expect_s3_class(result_exact, c("data.frame"))
+  expect_equal(length(result_exact), 7)
+})
+
+
+# Test 8: Error handling
+test_that("plot method throws an error if dens is not an object of class density", {
+  set.seed(123)
+  data <- rnorm(5)
+  reg_bootstrap_result <- reg_bootstrap(data)
+  class(reg_bootstrap_result$dens) <- "hello world"
+  expect_error(plot(reg_bootstrap_result))
+})
+
+# Test 9: Error handling
+test_that("plot method throws an error if object is not an object of class extboot", {
+  set.seed(123)
+  data <- rnorm(5)
+  reg_bootstrap_result <- reg_bootstrap(data)
+  class(reg_bootstrap_result) <- "hello world"
+  expect_error(plot(reg_bootstrap_result))
+})
+

@@ -1,9 +1,8 @@
 #' Regular Bootstrap with Summary Statistics
 #'
-#' This function performs a regular bootstrap to generate a distribution of sample
-#' statistics. It then computes and returns a set of summary statistics: mode, mean,
+#' @description Performs a regular bootstrap to generate a distribution of sample
+#' statistics and computes a set of summary statistics: mode, median, mean,
 #' standard deviation, and lower and upper confidence intervals.
-#'
 #' @param data A numeric vector of data points.
 #' @param n_bootstraps An integer indicating the number of bootstrap samples to
 #' generate. Default is 10000.
@@ -11,18 +10,21 @@
 #' sample. Default is the mean function.
 #' @param lb Lower bound for the confidence interval. Default is 0.025.
 #' @param ub Upper bound for the confidence interval. Default is 0.975.
-#'
-#' @return A list with two elements: dens (a density estimate of the bootstrap sample statistics)
-#' and stats (a list of summary statistics including mode, mean, standard deviation,
-#' lower confidence interval (lCI), and upper confidence interval (uCI)).
+#' @param density_args Additional arguments to be passed to \code{\link[stats]{density}} function.
+#' @return A list with two elements: \itemize{
+#'  \item dens: a density estimate of the bootstrap sample statistics,
+#'  \item stats: a list of summary statistics including mode, median, mean,
+#'  standard deviation, lower confidence interval (lCI), and upper confidence
+#'  interval (uCI).}
+#' @seealso \code{\link{plot.regboot}}, \code{\link{summary.regboot}}
 #' @export
-#'
 #' @examples
 #' set.seed(123)
 #' data <- rnorm(5)
 #' result <- reg_bootstrap(data)
 #' result$stats
-reg_bootstrap <- function(data, n_bootstraps = 10000, anon = function(x)(mean(x)), lb = 0.025, ub = 0.975) {
+reg_bootstrap <- function(data, n_bootstraps = 10000, anon = function(x)(mean(x)),
+                          lb = 0.025, ub = 0.975, density_args) {
   n <- length(data)
 
   if(!(is.vector(data) & is.numeric(data))) stop("data should be a numeric vector.")
@@ -31,10 +33,19 @@ reg_bootstrap <- function(data, n_bootstraps = 10000, anon = function(x)(mean(x)
   bootstrap_stats <- replicate(n_bootstraps, anon(sample(data, n, replace = TRUE)))
 
   # Estimate the density of the bootstrap statistics.
-  density_estimate <- stats::density(bootstrap_stats, n = n_bootstraps)
+  if (missing(density_args)){
+    density_estimate <- stats::density(bootstrap_stats, n = n_bootstraps)
+  } else {
+    density_estimate <- do.call(stats::density, c(list(x = bootstrap_stats,
+                                                  n = n_bootstraps),
+                                                  density_args))
+  }
 
   # Mode
   mode <- bootstrap_stats[which.max(bootstrap_stats)]
+
+  # Median
+  median <- median(bootstrap_stats)
 
   # Mean
   mean <- mean(bootstrap_stats)
@@ -48,6 +59,7 @@ reg_bootstrap <- function(data, n_bootstraps = 10000, anon = function(x)(mean(x)
 
   # Store results in list
   stats <- list(mode = mode,
+                median = median,
                 mean = mean,
                 sd = sd,
                 lCI = lCI,
@@ -55,6 +67,52 @@ reg_bootstrap <- function(data, n_bootstraps = 10000, anon = function(x)(mean(x)
 
   result <- list(dens = density_estimate, stats = stats)
 
+  # Assign "regboot" class
+  class(result) <- "regboot"
+
   return(result)
 }
 
+#' Plot Method for 'regboot' Class
+#'
+#' @description Creates a plot of the density estimates of the bootstrap sample statistics
+#' returned from the \code{\link{reg_bootstrap}} function.
+#' @param x An object of class 'regboot', usually the output of the \code{\link{reg_bootstrap}} function.
+#' @param title A plot title. Default is "Regular Bootstrap Distribution".
+#' @param ... Additional parameters (currently ignored).
+#' @return A ggplot object showing the density estimates of the bootstrap sample statistic.
+#' @seealso \code{\link{reg_bootstrap}}, \code{\link{summary.regboot}}
+#' @examples
+#' set.seed(123)
+#' data <- rnorm(5)
+#' result <- reg_bootstrap(data)
+#' plot(result)
+#' @export
+plot.regboot <- function(x, title = "Regular Bootstrap Distribution", ...) {
+  if(methods::is(x) != "regboot")
+    stop("object must be an object of class regboot")
+  boot_plot(x, title = title)
+}
+
+#' Summary Method for 'regboot' Class
+#'
+#' @description Creates a summary table of the summary statistics computed in the
+#' \code{\link{reg_bootstrap}} function.
+#' @param object An object of class 'regboot', usually the output of the \code{\link{reg_bootstrap}} function.
+#' @param ... Additional parameters (currently ignored).
+#' @return A data.frame containing the summary statistics.
+#' @seealso \code{\link{reg_bootstrap}}, \code{\link{plot.regboot}}
+#' @examples
+#' set.seed(123)
+#' data <- rnorm(5)
+#' result <- reg_bootstrap(data)
+#' summary(result)
+#' @export
+summary.regboot <- function(object, ...) {
+  if(methods::is(object) != "regboot")
+    stop("object must be an object of class regboot")
+  summary_table <- as.data.frame(object$stats)
+  summary_table$Method <- "reg_bootstrap"
+  summary_table <- summary_table[, c(7, 1:6)]
+  return(summary_table)
+}

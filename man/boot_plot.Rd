@@ -7,9 +7,7 @@
 boot_plot(dens, title = "Distribution")
 }
 \arguments{
-\item{dens}{An named list returned from \code{exact_bootstrap()} or \code{reg_bootstrap()}
-with components dens$x (the coordinates of the points where the density is estimated) and y (the estimated density
-values), representing the density estimate of a bootstrap sample statistic.}
+\item{dens}{An object of class \code{exboot} or \code{regboot}}
 
 \item{title}{A plot title}
 }
@@ -18,12 +16,17 @@ A ggplot object showing the density estimates of a bootstrap sample
 statistic.
 }
 \description{
-This function generates a plot of the density estimates of a bootstrap
+Generates a plot of the density estimates of a bootstrap
 distribution.
 }
 \examples{
-set.seed(123)
-data <- rnorm(5)
-exact_bootstrap_result <- exact_bootstrap(data)
-boot_plot(exact_bootstrap_result)
+\dontrun{
+#set.seed(123)
+#data <- rnorm(5)
+#result <- exact_bootstrap(data)
+#boot_plot(result)
+}
+}
+\seealso{
+\code{\link{exact_bootstrap}}
 }

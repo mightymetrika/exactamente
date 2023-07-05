@@ -1,9 +1,7 @@
-#' Exact Bootstrap with Summary Statistics
-#'
-#' This function performs an exact bootstrap for small datasets of less than 10
-#' observations. It then computes and returns a set of summary statistics: mode, mean,
-#' standard deviation, and lower and upper confidence intervals.
-#'
+#' @title Performs an Exact Bootstrap with Summary Statistics
+#' @description Performs an exact bootstrap for small datasets of less than 10
+#' observations, then computes and returns a set of summary statistics: mode,
+#' median, mean, standard deviation, and lower and upper confidence intervals.
 #' @param data A numeric vector of data points.
 #' @param n_bootstraps An integer indicating the number of bootstrap samples to
 #' generate. Default is 10000.
@@ -13,19 +11,21 @@
 #' sample. Default is the mean function.
 #' @param lb Lower bound for the confidence interval. Default is 0.025.
 #' @param ub Upper bound for the confidence interval. Default is 0.975.
-#'
+#' @param density_args Pass additional arguments to stats::density
 #' @return A list with two elements: dens (a density estimate of the bootstrap sample statistics)
-#' and stats (a list of summary statistics including mode, mean, standard deviation,
+#' and stats (a list of summary statistics including mode, median, mean, standard deviation,
 #' lower confidence interval (lCI), and upper confidence interval (uCI)).
-#' @export
-#'
 #' @examples
 #' set.seed(123)
 #' data <- rnorm(5)
 #' result <- exact_bootstrap(data)
-#' result$stats
+#' summary(result)
+#' plot(result)
+#' @seealso \code{\link{plot.extboot}}, \code{\link{summary.extboot}}
+#' @export
 exact_bootstrap <- function(data, n_bootstraps = 10000, check_size = TRUE,
-                            anon = function(x)(mean(x)), lb = 0.025, ub = 0.975) {
+                            anon = function(x)(mean(x)), lb = 0.025, ub = 0.975,
+                            density_args) {
   n <- length(data)
   if (check_size == TRUE & n > 9) stop("This function only works for datasets
                                         with less than 10 observations.")
@@ -39,10 +39,19 @@ exact_bootstrap <- function(data, n_bootstraps = 10000, check_size = TRUE,
   bootstrap_stats <- apply(bootstrap_samples, 1, anon)
 
   # Estimate the density of the bootstrap statistic
-  density_estimate <- stats::density(bootstrap_stats, n = n_bootstraps)
+  if (missing(density_args)){
+    density_estimate <- stats::density(bootstrap_stats, n = n_bootstraps)
+  } else {
+    density_estimate <- do.call(stats::density, c(list(x = bootstrap_stats,
+                                                  n = n_bootstraps),
+                                                  density_args))
+  }
 
   # Mode
   mode <- bootstrap_stats[which.max(bootstrap_stats)]
+
+  # Median
+  median <- median(bootstrap_stats)
 
   # Mean
   mean <- mean(bootstrap_stats)
@@ -56,6 +65,7 @@ exact_bootstrap <- function(data, n_bootstraps = 10000, check_size = TRUE,
 
   # Store results in list
   stats <- list(mode = mode,
+                median = median,
                 mean = mean,
                 sd = sd,
                 lCI = lCI,
@@ -63,5 +73,53 @@ exact_bootstrap <- function(data, n_bootstraps = 10000, check_size = TRUE,
 
   result <- list(dens = density_estimate, stats = stats)
 
+  # Assign "extboot" class
+  class(result) <- "extboot"
+
   return(result)
+}
+
+
+#' Plot Method for 'extboot' Class
+#'
+#' @description Creates a plot of the density estimates of the bootstrap sample statistics
+#' returned from the \code{\link{exact_bootstrap}} function.
+#' @param x An object of class 'extboot', usually the output of the \code{\link{exact_bootstrap}} function.
+#' @param title A plot title. Default is "Exact Bootstrap Distribution".
+#' @param ... Additional parameters (currently ignored).
+#' @return A ggplot object showing the density estimates of the bootstrap sample statistic.
+#' @seealso \code{\link{exact_bootstrap}}, \code{\link{summary.extboot}}
+#' @examples
+#' set.seed(123)
+#' data <- rnorm(5)
+#' result <- exact_bootstrap(data)
+#' plot(result)
+#' @export
+plot.extboot <- function(x, title = "Exact Bootstrap Distribution", ...) {
+  if(methods::is(x) != "extboot")
+    stop("x must be an object of class extboot")
+  boot_plot(x, title = title)
+}
+
+#' Summary Method for 'extboot' Class
+#'
+#' @description Creates a summary table of the summary statistics computed in the
+#' \code{\link{exact_bootstrap}} function.
+#' @param object An object of class 'extboot', usually the output of the \code{\link{exact_bootstrap}} function.
+#' @param ... Additional parameters (currently ignored).
+#' @return A data.frame containing the summary statistics.
+#' @seealso \code{\link{exact_bootstrap}}, \code{\link{plot.extboot}}
+#' @examples
+#' set.seed(123)
+#' data <- rnorm(5)
+#' result <- exact_bootstrap(data)
+#' summary(result)
+#' @export
+summary.extboot <- function(object, ...) {
+  if(methods::is(object) != "extboot")
+    stop("object must be an object of class extboot")
+  summary_table <- as.data.frame(object$stats)
+  summary_table$Method <- "exact_bootstrap"
+  summary_table <- summary_table[, c(7, 1:6)]
+  return(summary_table)
 }
