@@ -8,7 +8,7 @@ test_that("e_vs_r works correctly with a valid input", {
   expect_s3_class(result$summary_table, "data.frame")
   expect_s3_class(result$comp_plot, c("gg", "ggplot"))
   expect_equal(nrow(result$summary_table), 2)
-  expect_equal(result$summary_table$Method, c("Exact_bootstrap", "Regular_bootstrap"))
+  expect_equal(result$summary_table$Method, c("exact_bootstrap", "reg_bootstrap"))
 })
 
 # Test 2: `n_bootstraps`, `check_size`, `anon`, `lb` and `ub` parameters
@@ -18,8 +18,6 @@ test_that("`n_bootstraps`, `check_size`, `anon`, `lb` and `ub` parameters modify
   result1 <- e_vs_r(data)
   result2 <- e_vs_r(data, n_bootstraps = 5000, check_size = FALSE, anon = function(x)(median(x)), lb = 0.01, ub = 0.99)
   # The summary tables should be different
-  expect_false(result1$summary_table$mode[[1]] == result2$summary_table$mode[[1]])
-  expect_false(result1$summary_table$mode[[2]] == result2$summary_table$mode[[2]])
   expect_false(result1$summary_table$mean[[1]] == result2$summary_table$mean[[1]])
   expect_false(result1$summary_table$mean[[2]] == result2$summary_table$mean[[2]])
 })

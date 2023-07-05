@@ -2,9 +2,15 @@
 % Please edit documentation in R/reg_bootstrap.R
 \name{reg_bootstrap}
 \alias{reg_bootstrap}
-\title{Regular Bootstrap}
+\title{Regular Bootstrap with Summary Statistics}
 \usage{
-reg_bootstrap(data, n_bootstraps = 10000, anon = function(x) (mean(x)))
+reg_bootstrap(
+  data,
+  n_bootstraps = 10000,
+  anon = function(x) (mean(x)),
+  lb = 0.025,
+  ub = 0.975
+)
 }
 \arguments{
 \item{data}{A numeric vector of data points.}
@@ -14,18 +20,24 @@ generate. Default is 10000.}
 
 \item{anon}{A function to compute the sample statistic for each bootstrap
 sample. Default is the mean function.}
+
+\item{lb}{Lower bound for the confidence interval. Default is 0.025.}
+
+\item{ub}{Upper bound for the confidence interval. Default is 0.975.}
 }
 \value{
-A list with components x (the n coordinates of the points where the
-density is estimated) and y (the estimated density values) which gives the
-density estimate of the bootstrap sample statistics.
+A list with two elements: dens (a density estimate of the bootstrap sample statistics)
+and stats (a list of summary statistics including mode, mean, standard deviation,
+lower confidence interval (lCI), and upper confidence interval (uCI)).
 }
 \description{
 This function performs a regular bootstrap to generate a distribution of sample
-statistics.
+statistics. It then computes and returns a set of summary statistics: mode, mean,
+standard deviation, and lower and upper confidence intervals.
 }
 \examples{
 set.seed(123)
 data <- rnorm(5)
-reg_bootstrap(data)
+result <- reg_bootstrap(data)
+result$stats
 }
