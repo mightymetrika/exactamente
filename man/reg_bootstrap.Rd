@@ -9,7 +9,8 @@ reg_bootstrap(
   n_bootstraps = 10000,
   anon = function(x) (mean(x)),
   lb = 0.025,
-  ub = 0.975
+  ub = 0.975,
+  density_args
 )
 }
 \arguments{
@@ -24,15 +25,19 @@ sample. Default is the mean function.}
 \item{lb}{Lower bound for the confidence interval. Default is 0.025.}
 
 \item{ub}{Upper bound for the confidence interval. Default is 0.975.}
+
+\item{density_args}{Additional arguments to be passed to \code{\link[stats]{density}} function.}
 }
 \value{
-A list with two elements: dens (a density estimate of the bootstrap sample statistics)
-and stats (a list of summary statistics including mode, mean, standard deviation,
-lower confidence interval (lCI), and upper confidence interval (uCI)).
+A list with two elements: \itemize{
+\item dens: a density estimate of the bootstrap sample statistics,
+\item stats: a list of summary statistics including mode, median, mean,
+standard deviation, lower confidence interval (lCI), and upper confidence
+interval (uCI).}
 }
 \description{
-This function performs a regular bootstrap to generate a distribution of sample
-statistics. It then computes and returns a set of summary statistics: mode, mean,
+Performs a regular bootstrap to generate a distribution of sample
+statistics and computes a set of summary statistics: mode, median, mean,
 standard deviation, and lower and upper confidence intervals.
 }
 \examples{
@@ -40,4 +45,7 @@ set.seed(123)
 data <- rnorm(5)
 result <- reg_bootstrap(data)
 result$stats
+}
+\seealso{
+\code{\link{plot.regboot}}, \code{\link{summary.regboot}}
 }

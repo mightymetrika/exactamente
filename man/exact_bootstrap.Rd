@@ -2,7 +2,7 @@
 % Please edit documentation in R/exact_bootstrap.R
 \name{exact_bootstrap}
 \alias{exact_bootstrap}
-\title{Exact Bootstrap with Summary Statistics}
+\title{Performs an Exact Bootstrap with Summary Statistics}
 \usage{
 exact_bootstrap(
   data,
@@ -10,7 +10,8 @@ exact_bootstrap(
   check_size = TRUE,
   anon = function(x) (mean(x)),
   lb = 0.025,
-  ub = 0.975
+  ub = 0.975,
+  density_args
 )
 }
 \arguments{
@@ -28,20 +29,26 @@ sample. Default is the mean function.}
 \item{lb}{Lower bound for the confidence interval. Default is 0.025.}
 
 \item{ub}{Upper bound for the confidence interval. Default is 0.975.}
+
+\item{density_args}{Pass additional arguments to stats::density}
 }
 \value{
 A list with two elements: dens (a density estimate of the bootstrap sample statistics)
-and stats (a list of summary statistics including mode, mean, standard deviation,
+and stats (a list of summary statistics including mode, median, mean, standard deviation,
 lower confidence interval (lCI), and upper confidence interval (uCI)).
 }
 \description{
-This function performs an exact bootstrap for small datasets of less than 10
-observations. It then computes and returns a set of summary statistics: mode, mean,
-standard deviation, and lower and upper confidence intervals.
+Performs an exact bootstrap for small datasets of less than 10
+observations, then computes and returns a set of summary statistics: mode,
+median, mean, standard deviation, and lower and upper confidence intervals.
 }
 \examples{
 set.seed(123)
 data <- rnorm(5)
 result <- exact_bootstrap(data)
-result$stats
+summary(result)
+plot(result)
+}
+\seealso{
+\code{\link{plot.extboot}}, \code{\link{summary.extboot}}
 }

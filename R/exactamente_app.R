@@ -14,7 +14,7 @@ exactamente_app <- function() {
 
   # User Interface
   ui <- shiny::fluidPage(
-    shiny::titlePanel("Exactamente - Bootstrap Methods"),
+    shiny::titlePanel("Explore Bootstrap Methods"),
     shiny::sidebarLayout(
       shiny::sidebarPanel(
         shiny::radioButtons("method", "Choose method:",
@@ -23,6 +23,7 @@ exactamente_app <- function() {
         shiny::textAreaInput("data", "Enter data (numeric vector):", "rnorm(5)"),
         shiny::checkboxInput("check_size", "Check size:", value = TRUE),
         shiny::textInput("anon", "Statistic function:", "mean"),
+        shiny::textInput("density_args", "Arguments for density function:", "bw = 0.5, kernel = 'gaussian'"),
         shiny::numericInput("lb", "Lower bound for CI:", value = 0.025),
         shiny::numericInput("ub", "Upper bound for CI:", value = 0.975),
         shiny::actionButton("run", "Run"),
@@ -78,46 +79,47 @@ exactamente_app <- function() {
       }
     })
 
+    density_args_check <- shiny::reactive({
+      args <- try(eval(parse(text = paste0("list(", input$density_args, ")"))), silent = TRUE)
+      if(inherits(args, "try-error")) {
+        return("Please enter valid arguments for density function.")
+      } else {
+        return(NULL)
+      }
+    })
+
     output$data_warning <- shiny::renderText(data_check())
     output$bootstrap_warning <- shiny::renderText(bootstrap_check())
     output$function_warning <- shiny::renderText(function_check())
     output$CI_warning <- shiny::renderText(CI_check())
+    output$density_args_warning <- shiny::renderText(density_args_check())
 
     shiny::observeEvent(input$run, {
 
       # Check if inputs are valid
-      if(!is.null(data_check()) || !is.null(bootstrap_check()) || !is.null(function_check()) || !is.null(CI_check())) {
+      if(!is.null(data_check()) || !is.null(bootstrap_check()) || !is.null(function_check()) || !is.null(CI_check()) || !is.null(density_args_check())) {
         return()  # Skip rest of the code if any input is not valid
       }
 
       # Parse user inputs
       data <- eval(parse(text = input$data))
       anon <- eval(parse(text = paste0("function(x)(", input$anon,"(x))")))
-      # anon <- try(eval(parse(text = paste0("function(x) ", input$anon))), silent = TRUE)
-      #
-      # # Check if anon is a simple function name (like 'mean') without arguments
-      # if(inherits(anon, "try-error")) {
-      #   anon <- try(eval(parse(text = paste0(input$anon, "(x)"))), silent = TRUE)
-      # }
+      density_args <- eval(parse(text = paste0("list(", input$density_args, ")")))
 
       # Run chosen method and generate outputs
       if(input$method == "Exact") {
         result <- exact_bootstrap(data, input$n_bootstraps, input$check_size, anon,
-                                  input$lb, input$ub)
-        summary_table <- as.data.frame(result$stats)
-        summary_table$Method <- c("exact_bootstrap")
-        summary_table <- summary_table[, c(6, 1:2, 3, 4, 5)]
-        output$summary_table <- shiny::renderTable(summary_table)
-        output$plot <- shiny::renderPlot(boot_plot(result, "Exact Bootstrap Distribution"))
+                                  input$lb, input$ub, density_args)
+        output$summary_table <- shiny::renderTable(summary(result))
+        output$plot <- shiny::renderPlot(plot(result, "Exact Bootstrap Distribution"))
       } else if(input$method == "Regular") {
-        result <- reg_bootstrap(data, input$n_bootstraps, anon)
-        summary_table <- as.data.frame(result$stats)
-        summary_table$Method <- c("reg_bootstrap")
-        summary_table <- summary_table[, c(6, 1:2, 3, 4, 5)]
-        output$summary_table <- shiny::renderTable(summary_table)
-        output$plot <- shiny::renderPlot(boot_plot(result, "Regular Bootstrap Distribution"))
+        result <- reg_bootstrap(data, input$n_bootstraps, anon, input$lb, input$ub,
+                                density_args)
+        output$summary_table <- shiny::renderTable(summary(result))
+        output$plot <- shiny::renderPlot(plot(result, "Regular Bootstrap Distribution"))
       } else if(input$method == "Both") {
-        result <- e_vs_r(data, input$n_bootstraps, input$check_size, anon, input$lb, input$ub)
+        result <- e_vs_r(data, input$n_bootstraps, input$check_size, anon,
+                         input$lb, input$ub, density_args)
         output$summary_table <- shiny::renderTable(result$summary_table)
         output$plot <- shiny::renderPlot(print(result$comp_plot))
       }

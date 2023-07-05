@@ -28,8 +28,14 @@ compare_bootstrap <- function(exact_bootstrap_distribution,
   if(methods::is(exact_bootstrap_distribution$dens)[[1]] != "density")
     stop("exact_bootstrap_distribution must be an object of class density.")
 
+  if(methods::is(exact_bootstrap_distribution) != "extboot")
+    stop("exact_bootstrap_distribution must be an object of class extboot")
+
   if(methods::is(regular_bootstrap_distribution$dens)[[1]] != "density")
     stop("regular_bootstrap_distribution must be an object of class density.")
+
+  if(methods::is(regular_bootstrap_distribution) != "regboot")
+    stop("regular_bootstrap_distribution must be an object of class regboot")
 
   exact_df <- data.frame(x = exact_bootstrap_distribution$dens$x,
                          y = exact_bootstrap_distribution$dens$y,

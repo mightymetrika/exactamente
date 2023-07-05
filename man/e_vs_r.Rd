@@ -10,7 +10,8 @@ e_vs_r(
   check_size = TRUE,
   anon = function(x) (mean(x)),
   lb = 0.025,
-  ub = 0.975
+  ub = 0.975,
+  density_args
 )
 }
 \arguments{
@@ -27,12 +28,14 @@ each bootstrap sample. Defaults to mean.}
 \item{lb}{Lower bound for the confidence interval. Defaults to 0.025.}
 
 \item{ub}{Upper bound for the confidence interval. Defaults to 0.975.}
+
+\item{density_args}{Pass additional arguments to stats::density}
 }
 \value{
 A list containing two items:
 \itemize{
-\item summary_table: A summary table containing the mode, mean, standard deviation,
-and highest density interval for each bootstrap method.
+\item summary_table: A summary table containing the mode, median, mean,
+standard deviation, and highest density interval for each bootstrap method.
 \item comp_plot: A ggplot object comparing the bootstrap distributions.
 }
 }
