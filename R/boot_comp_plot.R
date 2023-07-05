@@ -3,15 +3,18 @@
 #' This function generates a plot comparing the density estimates of the exact
 #' and regular bootstrap distributions.
 #'
-#' @param exact_bootstrap_distribution A list with components x (the coordinates
-#' of the points where the density is estimated) and y (the estimated density
-#' values), representing the density estimate of the exact bootstrap sample statistics.
-#' @param regular_bootstrap_distribution A list with components x (the coordinates
-#' of the points where the density is estimated) and y (the estimated density
-#' values), representing the density estimate of the regular bootstrap sample statistics.
+#' @param exact_bootstrap_distribution An named list returned from
+#' `exact_bootstrap()` with components dens$x (the coordinates of the points where
+#' the density is estimated) and y (the estimated density values), representing
+#' the density estimate of the exact bootstrap sample statistic.
+#' @param regular_bootstrap_distribution An named list returned from
+#' `reg_bootstrap()` with components dens$x (the coordinates of the points where
+#' the density is estimated) and y (the estimated density values), representing
+#' the density estimate of the regular bootstrap sample statistic.
 #'
 #' @return A ggplot object showing the density estimates of the exact and regular
-#' bootstrap sample statistics, with different colors used to distinguish between the two.
+#' bootstrap sample statistics, with different colors used to distinguish between
+#' the two.
 #' @export
 #'
 #' @examples
@@ -22,18 +25,18 @@
 #' compare_bootstrap(exact_bootstrap_result, regular_bootstrap_result)
 compare_bootstrap <- function(exact_bootstrap_distribution,
                               regular_bootstrap_distribution) {
-  if(methods::is(exact_bootstrap_distribution)[[1]] != "density")
+  if(methods::is(exact_bootstrap_distribution$dens)[[1]] != "density")
     stop("exact_bootstrap_distribution must be an object of class density.")
 
-  if(methods::is(regular_bootstrap_distribution)[[1]] != "density")
+  if(methods::is(regular_bootstrap_distribution$dens)[[1]] != "density")
     stop("regular_bootstrap_distribution must be an object of class density.")
 
-  exact_df <- data.frame(x = exact_bootstrap_distribution$x,
-                         y = exact_bootstrap_distribution$y,
+  exact_df <- data.frame(x = exact_bootstrap_distribution$dens$x,
+                         y = exact_bootstrap_distribution$dens$y,
                          Method = "Exact Bootstrap")
 
-  reg_df <- data.frame(x = regular_bootstrap_distribution$x,
-                       y = regular_bootstrap_distribution$y,
+  reg_df <- data.frame(x = regular_bootstrap_distribution$dens$x,
+                       y = regular_bootstrap_distribution$dens$y,
                        Method = "Regular Bootstrap")
 
   full_df <- rbind(exact_df, reg_df)

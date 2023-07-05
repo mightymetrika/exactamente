@@ -2,13 +2,15 @@
 % Please edit documentation in R/exact_bootstrap.R
 \name{exact_bootstrap}
 \alias{exact_bootstrap}
-\title{Exact Bootstrap}
+\title{Exact Bootstrap with Summary Statistics}
 \usage{
 exact_bootstrap(
   data,
   n_bootstraps = 10000,
   check_size = TRUE,
-  anon = function(x) (mean(x))
+  anon = function(x) (mean(x)),
+  lb = 0.025,
+  ub = 0.975
 )
 }
 \arguments{
@@ -17,23 +19,29 @@ exact_bootstrap(
 \item{n_bootstraps}{An integer indicating the number of bootstrap samples to
 generate. Default is 10000.}
 
-\item{check_size}{A logical value indicating whether to check if the size of
-the dataset is less than 10. Default is TRUE.}
+\item{check_size}{A logical value indicating whether to check if the size of the
+dataset is less than 10. Default is TRUE.}
 
 \item{anon}{A function to compute the sample statistic for each bootstrap
 sample. Default is the mean function.}
+
+\item{lb}{Lower bound for the confidence interval. Default is 0.025.}
+
+\item{ub}{Upper bound for the confidence interval. Default is 0.975.}
 }
 \value{
-A list with components x (the n coordinates of the points where the
-density is estimated) and y (the estimated density values) which gives the
-density estimate of the bootstrap sample statistics.
+A list with two elements: dens (a density estimate of the bootstrap sample statistics)
+and stats (a list of summary statistics including mode, mean, standard deviation,
+lower confidence interval (lCI), and upper confidence interval (uCI)).
 }
 \description{
 This function performs an exact bootstrap for small datasets of less than 10
-observations.
+observations. It then computes and returns a set of summary statistics: mode, mean,
+standard deviation, and lower and upper confidence intervals.
 }
 \examples{
 set.seed(123)
 data <- rnorm(5)
-exact_bootstrap(data)
+result <- exact_bootstrap(data)
+result$stats
 }

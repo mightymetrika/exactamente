@@ -15,6 +15,6 @@ test_that("boot_plot throws an error if dens is not an object of class density",
   set.seed(123)
   data <- rnorm(5)
   exact_bootstrap_result <- exact_bootstrap(data)
-  class(exact_bootstrap_result) <- "hello world"
+  class(exact_bootstrap_result$dens) <- "hello world"
   expect_error(boot_plot(exact_bootstrap_result))
            })

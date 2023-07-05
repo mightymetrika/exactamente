@@ -24,9 +24,9 @@ the dataset has less than 10 observations for the exact bootstrap. Defaults to T
 \item{anon}{An anonymous function to compute the statistic of interest on
 each bootstrap sample. Defaults to mean.}
 
-\item{lb}{Lower bound for the highest density interval. Defaults to 0.025.}
+\item{lb}{Lower bound for the confidence interval. Defaults to 0.025.}
 
-\item{ub}{Upper bound for the highest density interval. Defaults to 0.975.}
+\item{ub}{Upper bound for the confidence interval. Defaults to 0.975.}
 }
 \value{
 A list containing two items:
