@@ -7,8 +7,6 @@
 #' resample with larger variation, thus potentially increasing the bootstrap
 #' estimate's accuracy. This technique is described in Jekel and Romero (2020).
 #' @param data A numeric vector of data points.
-#' @param n_bootstraps An integer indicating the number of bootstrap samples to
-#' generate. Default is 10000.
 #' @param check_size A logical value indicating whether to check if the size of the
 #' dataset is less than 10. Default is TRUE.
 #' @param anon A function to compute the sample statistic for each bootstrap
@@ -30,9 +28,8 @@
 #' @references
 #' Jekel, C. F., & Romero, V. J. (2020). Conservative Estimation of Tail Probabilities from Limited Sample Data. \doi{https://doi.org/10.2172/1605343}
 #' @export
-exact_bootstrap <- function(data, n_bootstraps = 10000, check_size = TRUE,
-                            anon = function(x)(mean(x)), lb = 0.025, ub = 0.975,
-                            density_args) {
+exact_bootstrap <- function(data, check_size = TRUE, anon = function(x)(mean(x)),
+                            lb = 0.025, ub = 0.975, density_args) {
   n <- length(data)
   if (check_size == TRUE & n > 9) stop("This function only works for datasets
                                         with less than 10 observations.")
@@ -47,10 +44,9 @@ bootstrap_samples <- expand.grid(rep(list(data), n))
 
   # Estimate the density of the bootstrap statistic
   if (missing(density_args)){
-    density_estimate <- stats::density(bootstrap_stats, n = n_bootstraps)
+    density_estimate <- stats::density(bootstrap_stats)
   } else {
-    density_estimate <- do.call(stats::density, c(list(x = bootstrap_stats,
-                                                  n = n_bootstraps),
+    density_estimate <- do.call(stats::density, c(list(x = bootstrap_stats),
                                                   density_args))
   }
 

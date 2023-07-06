@@ -2,7 +2,7 @@
 % Please edit documentation in R/e_vs_r.R
 \name{e_vs_r}
 \alias{e_vs_r}
-\title{Compare Exact Bootstrap vs Regular Bootstrap}
+\title{Compare Exact Case Bootstrap vs Exact Bootstrap vs Regular Bootstrap}
 \usage{
 e_vs_r(
   data,
@@ -35,14 +35,14 @@ each bootstrap sample. Defaults to mean.}
 A list containing two items:
 \itemize{
 \item summary_table: A summary table containing the mode, median, mean,
-standard deviation, and highest density interval for each bootstrap method.
+standard deviation, and confidence interval for each bootstrap method.
 \item comp_plot: A ggplot object comparing the bootstrap distributions.
 }
 }
 \description{
-This function runs both the exact and regular bootstrap functions on a dataset,
-summarizes the results, and provides a comparative plot. It provides a
-convenient way to compare these two methods of bootstrapping.
+This function runs the exact case, exact, and regular bootstrap functions on
+a dataset, summarizes the results, and provides a comparative plot. It provides
+a convenient way to compare these two methods of bootstrapping.
 }
 \examples{
 set.seed(123)

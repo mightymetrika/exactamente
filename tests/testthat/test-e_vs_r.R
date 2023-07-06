@@ -7,8 +7,8 @@ test_that("e_vs_r works correctly with a valid input", {
   expect_named(result, c("summary_table", "comp_plot"))
   expect_s3_class(result$summary_table, "data.frame")
   expect_s3_class(result$comp_plot, c("gg", "ggplot"))
-  expect_equal(nrow(result$summary_table), 2)
-  expect_equal(result$summary_table$Method, c("exact_bootstrap", "reg_bootstrap"))
+  expect_equal(nrow(result$summary_table), 3)
+  expect_equal(levels(result$summary_table$Method), c("ecase_bootstrap", "exact_bootstrap", "reg_bootstrap"))
 })
 
 # Test 2: `n_bootstraps`, `check_size`, `anon`, `lb` and `ub` parameters

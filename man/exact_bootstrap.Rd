@@ -6,7 +6,6 @@
 \usage{
 exact_bootstrap(
   data,
-  n_bootstraps = 10000,
   check_size = TRUE,
   anon = function(x) (mean(x)),
   lb = 0.025,
@@ -16,9 +15,6 @@ exact_bootstrap(
 }
 \arguments{
 \item{data}{A numeric vector of data points.}
-
-\item{n_bootstraps}{An integer indicating the number of bootstrap samples to
-generate. Default is 10000.}
 
 \item{check_size}{A logical value indicating whether to check if the size of the
 dataset is less than 10. Default is TRUE.}

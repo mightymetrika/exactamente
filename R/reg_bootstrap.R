@@ -34,10 +34,9 @@ reg_bootstrap <- function(data, n_bootstraps = 10000, anon = function(x)(mean(x)
 
   # Estimate the density of the bootstrap statistics.
   if (missing(density_args)){
-    density_estimate <- stats::density(bootstrap_stats, n = n_bootstraps)
+    density_estimate <- stats::density(bootstrap_stats)
   } else {
-    density_estimate <- do.call(stats::density, c(list(x = bootstrap_stats,
-                                                  n = n_bootstraps),
+    density_estimate <- do.call(stats::density, c(list(x = bootstrap_stats),
                                                   density_args))
   }
 
