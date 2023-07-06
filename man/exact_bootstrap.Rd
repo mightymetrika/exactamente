@@ -29,10 +29,11 @@ sample. Default is the mean function.}
 \item{density_args}{Pass additional arguments to stats::density}
 }
 \value{
-A list with two elements: dens (a density estimate of the bootstrap
-sample statistics) and stats (a list of summary statistics including mode,
+A list with two elements: \itemize{
+\item dens: a density estimate of the bootstrap sample statistics,
+\item stats: a list of summary statistics including number of resamples, mode,
 median, mean, standard deviation, lower confidence interval (lCI), and upper
-confidence interval (uCI)).
+confidence interval (uCI).}
 }
 \description{
 Performs an exact bootstrap method on small datasets and returns

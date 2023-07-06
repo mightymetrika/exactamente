@@ -31,9 +31,9 @@ sample. Default is the mean function.}
 \value{
 A list with two elements: \itemize{
 \item dens: a density estimate of the bootstrap sample statistics,
-\item stats: a list of summary statistics including mode, median, mean,
-standard deviation, lower confidence interval (lCI), and upper confidence
-interval (uCI).}
+\item stats: a list of summary statistics including number of resamples, mode,
+median, mean, standard deviation, lower confidence interval (lCI), and upper
+confidence interval (uCI).}
 }
 \description{
 Performs a regular bootstrap to generate a distribution of sample

@@ -11,10 +11,11 @@
 #' @param lb Lower bound for the confidence interval. Default is 0.025.
 #' @param ub Upper bound for the confidence interval. Default is 0.975.
 #' @param density_args Pass additional arguments to stats::density
-#' @return A list with two elements: dens (a density estimate of the bootstrap
-#' sample statistics) and stats (a list of summary statistics including mode,
-#' median, mean, standard deviation, lower confidence interval (lCI), and upper
-#' confidence interval (uCI)).
+#' @return A list with two elements: \itemize{
+#'  \item dens: a density estimate of the bootstrap sample statistics,
+#'  \item stats: a list of summary statistics including number of resamples, mode,
+#'  median, mean, standard deviation, lower confidence interval (lCI), and upper
+#'  confidence interval (uCI).}
 #' @examples
 #' set.seed(123)
 #' data <- rnorm(5)
