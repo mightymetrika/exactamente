@@ -42,7 +42,7 @@ reg_bootstrap <- function(data, n_bootstraps = 10000, anon = function(x)(mean(x)
   }
 
   # Mode
-  mode <- bootstrap_stats[which.max(bootstrap_stats)]
+  mode <- density_estimate$x[which.max(density_estimate$y)]
 
   # Median
   median <- median(bootstrap_stats)
