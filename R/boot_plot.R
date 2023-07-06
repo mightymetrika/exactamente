@@ -17,8 +17,9 @@ boot_plot <- function(dens, title = "Distribution") {
   if(methods::is(dens$dens)[[1]] != "density")
     stop("dens$dens must be an object of class density.")
 
-  if(!(methods::is(dens) == "extboot" || methods::is(dens) == "regboot"))
-    stop("dens must be an object of class density.")
+  if(!(methods::is(dens) == "extboot" || methods::is(dens) == "regboot" ||
+       methods::is(dens) == "ecboot"))
+    stop("dens must be an object of class extboot, regboot, or ecboot")
 
   df <- data.frame(x = dens$dens$x,
                    y = dens$dens$y)
