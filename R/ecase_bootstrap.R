@@ -45,39 +45,10 @@ ecase_bootstrap <- function(data, check_size = TRUE, anon = function(x)(mean(x))
   # Compute the sample stat for each bootstrap sample.
   bootstrap_stats <- apply(bootstrap_samples, 1, anon)
 
-  # Estimate the density of the bootstrap statistic
-  if (missing(density_args)){
-    density_estimate <- stats::density(bootstrap_stats)
-  } else {
-    density_estimate <- do.call(stats::density, c(list(x = bootstrap_stats),
-                                                  density_args))
-  }
-
-  # Mode
-  mode <- density_estimate$x[which.max(density_estimate$y)]
-
-  # Median
-  median <- stats::median(bootstrap_stats)
-
-  # Mean
-  mean <- mean(bootstrap_stats)
-
-  # Standard deviation
-  sd <- sd(bootstrap_stats)
-
-  # Confidence Interval
-  lCI <- stats::quantile(bootstrap_stats, lb)
-  uCI <- stats::quantile(bootstrap_stats, ub)
-
-  # Store results in list
-  stats <- list(mode = mode,
-                median = median,
-                mean = mean,
-                sd = sd,
-                lCI = lCI,
-                uCI = uCI)
-
-  result <- list(dens = density_estimate, stats = stats)
+  # Process bootstrap stats
+  result <- process_bootstrap_stats(bootstrap_stats = bootstrap_stats,
+                                    density_args = density_args,
+                                    lb = lb, ub = ub)
 
   # Assign "ecboot" class
   class(result) <- "ecboot"
@@ -123,9 +94,7 @@ plot.ecboot <- function(x, title = "Exact Case Bootstrap Distribution", ...) {
 summary.ecboot <- function(object, ...) {
   if(methods::is(object) != "ecboot")
     stop("object must be an object of class ecboot")
-  summary_table <- as.data.frame(object$stats)
-  summary_table$Method <- "ecase_bootstrap"
-  summary_table <- summary_table[, c(7, 1:6)]
+  summary_table <- xboot_summary(object)
   return(summary_table)
 }
 

@@ -6,7 +6,7 @@ test_that("ecase_bootstrap works correctly with a valid input", {
   expect_type(result, "list")
   expect_s3_class(result, "ecboot")
   expect_named(result$dens, c("x", "y", "bw", "n", "call", "data.name","has.na"))
-  expect_named(result$stats, c("mode", "median", "mean", "sd", "lCI", "uCI"))
+  expect_named(result$stats, c("nres", "mode", "median", "mean", "sd", "lCI", "uCI"))
 })
 
 # Test 2: Number of observations
@@ -48,7 +48,7 @@ test_that("`density_args` works correctly", {
   result <- ecase_bootstrap(data, density_args = list(kernel = "cosine"))
   expect_type(result, "list")
   expect_named(result$dens, c("x", "y", "bw", "n", "call", "data.name","has.na"))
-  expect_named(result$stats, c("mode", "median", "mean", "sd", "lCI", "uCI"))
+  expect_named(result$stats, c("nres", "mode", "median", "mean", "sd", "lCI", "uCI"))
 })
 
 # Test 7: Plot method
@@ -67,7 +67,7 @@ test_that("plot method works correctly with a valid input", {
   ecase_bootstrap_result <- ecase_bootstrap(data)
   result_ecase <- summary(ecase_bootstrap_result)
   expect_s3_class(result_ecase, c("data.frame"))
-  expect_equal(length(result_ecase), 7)
+  expect_equal(length(result_ecase), 8)
 })
 
 
