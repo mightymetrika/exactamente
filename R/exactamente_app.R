@@ -23,7 +23,7 @@ exactamente_app <- function() {
         shiny::textAreaInput("data", "Enter data (numeric vector):", "rnorm(5)"),
         shiny::checkboxInput("check_size", "Check size:", value = TRUE),
         shiny::textInput("anon", "Statistic function:", "mean"),
-        shiny::textInput("density_args", "Arguments for density function:", "bw = 0.5, kernel = 'gaussian'"),
+        shiny::textInput("density_args", "Arguments for density function:", "bw = 'nrd0', kernel = 'gaussian'"),
         shiny::numericInput("lb", "Lower bound for CI:", value = 0.025),
         shiny::numericInput("ub", "Upper bound for CI:", value = 0.975),
         shiny::actionButton("run", "Run"),
@@ -63,11 +63,16 @@ exactamente_app <- function() {
     })
 
     function_check <- shiny::reactive({
-      fun <- try(eval(parse(text = paste0("function(x)(", input$anon,"(x))"))), silent = TRUE)
+      # Try to evaluate the user's input as a function, if it fails, try to append "function(x)" before the input
+      fun <- try(eval(parse(text = input$anon)), silent = TRUE)
       if(inherits(fun, "try-error")) {
-        return("Please enter a valid R function.")
-      } else {
+        fun <- try(eval(parse(text = paste0("function(x)(", input$anon,"(x))"))), silent = TRUE)
+      }
+      # Check if the evaluated input is a function
+      if(!inherits(fun, "try-error") && is.function(fun)) {
         return(NULL)
+      } else {
+        return("Please enter a valid R function.")
       }
     })
 
@@ -103,7 +108,10 @@ exactamente_app <- function() {
 
       # Parse user inputs
       data <- eval(parse(text = input$data))
-      anon <- eval(parse(text = paste0("function(x)(", input$anon,"(x))")))
+      anon <- try(eval(parse(text = input$anon)), silent = TRUE)
+      if(inherits(anon, "try-error")) {
+        anon <- eval(parse(text = paste0("function(x)(", input$anon,"(x))")))
+      }
       density_args <- eval(parse(text = paste0("list(", input$density_args, ")")))
 
       # Run chosen method and generate outputs
