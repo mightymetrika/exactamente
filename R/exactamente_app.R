@@ -18,7 +18,7 @@ exactamente_app <- function() {
     shiny::sidebarLayout(
       shiny::sidebarPanel(
         shiny::radioButtons("method", "Choose method:",
-                            c("Exact", "Regular", "Both")),
+                            c("ECase", "Exact", "Regular", "All")),
         shiny::numericInput("n_bootstraps", "Number of bootstraps:", value = 10000, min = 1),
         shiny::textAreaInput("data", "Enter data (numeric vector):", "rnorm(5)"),
         shiny::checkboxInput("check_size", "Check size:", value = TRUE),
@@ -107,8 +107,13 @@ exactamente_app <- function() {
       density_args <- eval(parse(text = paste0("list(", input$density_args, ")")))
 
       # Run chosen method and generate outputs
-      if(input$method == "Exact") {
-        result <- exact_bootstrap(data, input$n_bootstraps, input$check_size, anon,
+      if(input$method == "ECase") {
+        result <- ecase_bootstrap(data, input$check_size, anon,
+                                  input$lb, input$ub, density_args)
+        output$summary_table <- shiny::renderTable(summary(result))
+        output$plot <- shiny::renderPlot(plot(result, "Exact Case Bootstrap Distribution"))
+      } else if (input$method == "Exact") {
+        result <- exact_bootstrap(data, input$check_size, anon,
                                   input$lb, input$ub, density_args)
         output$summary_table <- shiny::renderTable(summary(result))
         output$plot <- shiny::renderPlot(plot(result, "Exact Bootstrap Distribution"))
@@ -117,7 +122,7 @@ exactamente_app <- function() {
                                 density_args)
         output$summary_table <- shiny::renderTable(summary(result))
         output$plot <- shiny::renderPlot(plot(result, "Regular Bootstrap Distribution"))
-      } else if(input$method == "Both") {
+      } else if(input$method == "All") {
         result <- e_vs_r(data, input$n_bootstraps, input$check_size, anon,
                          input$lb, input$ub, density_args)
         output$summary_table <- shiny::renderTable(result$summary_table)

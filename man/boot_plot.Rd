@@ -7,7 +7,7 @@
 boot_plot(dens, title = "Distribution")
 }
 \arguments{
-\item{dens}{An object of class \code{exboot} or \code{regboot}}
+\item{dens}{An object of class \code{ecboot}, \code{exboot}, or \code{regboot}}
 
 \item{title}{A plot title}
 }

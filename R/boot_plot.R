@@ -1,7 +1,7 @@
 #' @title Plot Bootstrap Distributions
 #' @description Generates a plot of the density estimates of a bootstrap
 #' distribution.
-#' @param dens An object of class `exboot` or `regboot`
+#' @param dens An object of class `ecboot`, `exboot`, or `regboot`
 #' @param title A plot title
 #' @return A ggplot object showing the density estimates of a bootstrap sample
 #' statistic.
