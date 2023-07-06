@@ -6,7 +6,7 @@ test_that("reg_bootstrap works correctly with a valid input", {
   expect_s3_class(result, "regboot")
   expect_type(result, "list")
   expect_named(result$dens, c("x", "y", "bw", "n", "call", "data.name","has.na" ))
-  expect_named(result$stats, c("mode", "median", "mean", "sd", "lCI", "uCI"))
+  expect_named(result$stats, c("nres", "mode", "median", "mean", "sd", "lCI", "uCI"))
 })
 
 # Test 2: `n_bootstraps` and `anon` parameters
@@ -41,7 +41,7 @@ test_that("`density_args` works correctly", {
   result <- reg_bootstrap(data, density_args = list(kernel = "cosine"))
   expect_type(result, "list")
   expect_named(result$dens, c("x", "y", "bw", "n", "call", "data.name","has.na"))
-  expect_named(result$stats, c("mode", "median", "mean", "sd", "lCI", "uCI"))
+  expect_named(result$stats, c("nres", "mode", "median", "mean", "sd", "lCI", "uCI"))
 })
 
 # Test 6: Plot method
@@ -60,7 +60,7 @@ test_that("plot method works correctly with a valid input", {
   reg_bootstrap_result <- reg_bootstrap(data)
   result_exact <- summary(reg_bootstrap_result)
   expect_s3_class(result_exact, c("data.frame"))
-  expect_equal(length(result_exact), 7)
+  expect_equal(length(result_exact), 8)
 })
 
 

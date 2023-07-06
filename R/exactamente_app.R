@@ -18,7 +18,7 @@ exactamente_app <- function() {
     shiny::sidebarLayout(
       shiny::sidebarPanel(
         shiny::radioButtons("method", "Choose method:",
-                            c("ECase", "Exact", "Regular", "All")),
+                            c("Exact Case", "Exact", "Regular", "All")),
         shiny::numericInput("n_bootstraps", "Number of bootstraps:", value = 10000, min = 1),
         shiny::textAreaInput("data", "Enter data (numeric vector):", "rnorm(5)"),
         shiny::checkboxInput("check_size", "Check size:", value = TRUE),
@@ -107,7 +107,7 @@ exactamente_app <- function() {
       density_args <- eval(parse(text = paste0("list(", input$density_args, ")")))
 
       # Run chosen method and generate outputs
-      if(input$method == "ECase") {
+      if(input$method == "Exact Case") {
         result <- ecase_bootstrap(data, input$check_size, anon,
                                   input$lb, input$ub, density_args)
         output$summary_table <- shiny::renderTable(summary(result))

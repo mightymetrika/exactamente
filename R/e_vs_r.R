@@ -37,15 +37,14 @@ e_vs_r <- function(data, n_bootstraps = 10000, check_size = TRUE,
   reg_result <- reg_bootstrap(data, n_bootstraps, anon, lb = lb, ub = ub, density_args)
 
   # Create summary table
-  summary_table <- rbind(as.data.frame(ecase_result$stats),
-                         as.data.frame(exact_result$stats),
-                         as.data.frame(reg_result$stats))
-  summary_table$Method <- c("ecase_bootstrap", "exact_bootstrap", "reg_bootstrap")
+  summary_table <- rbind(xboot_summary(ecase_result),
+                         xboot_summary(exact_result),
+                         xboot_summary(reg_result))
+
   summary_table$Method <- factor(summary_table$Method,
                                  levels = c("ecase_bootstrap",
                                             "exact_bootstrap",
                                             "reg_bootstrap"))
-  summary_table <- summary_table[, c(7, 1:6)]
 
   # Plot comparison
   comp_plot <- compare_bootstrap(ecase_result, exact_result, reg_result)
