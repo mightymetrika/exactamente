@@ -13,6 +13,7 @@
 #' #boot_plot(result)
 #' }
 #' @seealso \code{\link{exact_bootstrap}}
+#' @keywords internal
 boot_plot <- function(dens, title = "Distribution") {
   if(methods::is(dens$dens)[[1]] != "density")
     stop("dens$dens must be an object of class density.")

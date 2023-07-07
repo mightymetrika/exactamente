@@ -27,7 +27,7 @@ before calling this function.
 \examples{
 \dontrun{
 # This example launches the Shiny application
-exactamente_app()
+#exactamente_app()
 }
 
 
