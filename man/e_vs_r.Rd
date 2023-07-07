@@ -11,7 +11,8 @@ e_vs_r(
   anon = function(x) (mean(x)),
   lb = 0.025,
   ub = 0.975,
-  density_args
+  density_args,
+  title = "Comparison of Bootstrap Distributions"
 )
 }
 \arguments{
@@ -30,6 +31,8 @@ each bootstrap sample. Defaults to mean.}
 \item{ub}{Upper bound for the confidence interval. Defaults to 0.975.}
 
 \item{density_args}{Pass additional arguments to stats::density}
+
+\item{title}{Plot title}
 }
 \value{
 A list containing two items:

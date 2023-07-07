@@ -15,6 +15,7 @@
 #' `reg_bootstrap()` with components dens$x (the coordinates of the points where
 #' the density is estimated) and y (the estimated density values), representing
 #' the density estimate of the regular bootstrap sample statistic.
+#' @param title Plot title
 #'
 #' @return A ggplot object showing the density estimates of the exact and regular
 #' bootstrap sample statistics, with different colors used to distinguish between
@@ -32,7 +33,8 @@
 #'                   regular_bootstrap_result)
 compare_bootstrap <- function(ecase_bootstrap_distribution,
                               exact_bootstrap_distribution,
-                              regular_bootstrap_distribution) {
+                              regular_bootstrap_distribution,
+                              title = "Comparison of Bootstrap Distributions") {
   if(methods::is(ecase_bootstrap_distribution$dens)[[1]] != "density")
     stop("ecase_bootstrap_distribution must be an object of class density.")
 
@@ -70,11 +72,15 @@ compare_bootstrap <- function(ecase_bootstrap_distribution,
 
   p <- ggplot2::ggplot(full_df, ggplot2::aes(x = x, y = y, color = Method)) +
     ggplot2::geom_line() +
-    ggplot2::labs(title = "Comparison of Bootstrap Distributions", x = "Sample Stat", y = "Density") +
+    ggplot2::labs(x = "Sample Stat", y = "Density") +
     ggplot2::theme_minimal() +
     ggplot2::scale_color_manual(values = c("Exact Case Bootstrap" = "green",
                                            "Exact Bootstrap" = "blue",
-                                           "Regular Bootstrap" = "red"))
+                                           "Regular Bootstrap" = "red")) +
+    ggplot2::ggtitle(title) +
+    ggplot2::theme(plot.title = ggplot2::element_text(color = "#333333",
+                                                      size = 22.5, face = "plain",
+                                                      hjust = -0.08))
 
   return(p)
 }
