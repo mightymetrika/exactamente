@@ -54,6 +54,8 @@ exactamente_app <- function() {
       # Check if data is a valid numeric vector, and show a warning message if not
       if(inherits(data, "try-error") || !is.numeric(data)) {
         return("Please enter a valid R numeric vector.")
+      } else if(any(is.na(data))) {
+        return("Data cannot contain missing values.")
       } else {
         return(NULL)
       }
@@ -75,11 +77,21 @@ exactamente_app <- function() {
       }
       # Check if the evaluated input is a function
       if(!inherits(fun, "try-error") && is.function(fun)) {
+        # Test if the function returns a valid numeric result
+        data <- try(eval(parse(text = input$data)), silent = TRUE)
+        if(inherits(data, "try-error") || !is.numeric(data)) {
+          return(NULL)
+        }
+        result <- try(fun(data), silent = TRUE)
+        if(inherits(result, "try-error") || any(is.nan(result)) || any(is.infinite(result))) {
+          return("The provided statistic function creates NaN or Inf values. Please modify the function.")
+        }
         return(NULL)
       } else {
         return("Please enter a valid R function.")
       }
     })
+
 
     CI_check <- shiny::reactive({
       if(!is.numeric(input$lb) || !is.numeric(input$ub) || input$lb < 0 || input$ub > 1 || input$lb >= input$ub) {
@@ -119,28 +131,44 @@ exactamente_app <- function() {
       }
       density_args <- eval(parse(text = paste0("list(", input$density_args, ")")))
 
-      # Run chosen method and generate outputs
+      #Run chosen method and generate outputs
       if(input$method == "Exact Case") {
-        result <- ecase_bootstrap(data, input$check_size, anon,
-                                  input$lb, input$ub, density_args)
+        shiny::validate(
+          shiny::need(tryCatch({
+            result <- ecase_bootstrap(data, input$check_size, anon,
+                                      input$lb, input$ub, density_args)
+          }, error = function(e) e$message), "An error occurred.")
+        )
         output$summary_table <- shiny::renderTable(summary(result))
         output$plot <- shiny::renderPlot(plot(result,""))
         ptitle <- "Exact Case Bootstrap Distribution"
       } else if (input$method == "Exact") {
-        result <- exact_bootstrap(data, input$check_size, anon,
-                                  input$lb, input$ub, density_args)
+        shiny::validate(
+          shiny::need(tryCatch({
+            result <- exact_bootstrap(data, input$check_size, anon,
+                                      input$lb, input$ub, density_args)
+          }, error = function(e) e$message), "An error occurred.")
+        )
         output$summary_table <- shiny::renderTable(summary(result))
         output$plot <- shiny::renderPlot(plot(result, ""))
         ptitle <- "Exact Bootstrap Distribution"
       } else if(input$method == "Regular") {
-        result <- reg_bootstrap(data, input$n_bootstraps, anon, input$lb, input$ub,
-                                density_args)
+        shiny::validate(
+          shiny::need(tryCatch({
+            result <- reg_bootstrap(data, input$n_bootstraps, anon, input$lb, input$ub,
+                                    density_args)
+          }, error = function(e) e$message), "An error occurred.")
+        )
         output$summary_table <- shiny::renderTable(summary(result))
         output$plot <- shiny::renderPlot(plot(result, ""))
         ptitle <- "Regular Bootstrap Distribution"
       } else if(input$method == "All") {
-        result <- e_vs_r(data, input$n_bootstraps, input$check_size, anon,
-                         input$lb, input$ub, density_args, title = "")
+        shiny::validate(
+          shiny::need(tryCatch({
+            result <- e_vs_r(data, input$n_bootstraps, input$check_size, anon,
+                             input$lb, input$ub, density_args, title = "")
+          }, error = function(e) e$message), "An error occurred.")
+        )
         output$summary_table <- shiny::renderTable(result$summary_table)
         output$plot <- shiny::renderPlot(print(result$comp_plot))
         ptitle <- "Comparison of Bootstrap Distributions"

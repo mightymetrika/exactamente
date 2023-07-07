@@ -19,13 +19,18 @@
 process_bootstrap_stats <- function(bootstrap_stats = bootstrap_stats,
                                     density_args = density_args,
                                     lb = lb, ub = ub){
-  # Estimate the density of the bootstrap statistic
-  if (missing(density_args)){
-    density_estimate <- stats::density(bootstrap_stats)
-  } else {
-    density_estimate <- do.call(stats::density, c(list(x = bootstrap_stats),
-                                                  density_args))
-  }
+
+  density_estimate <- tryCatch({
+    if (missing(density_args)){
+      stats::density(bootstrap_stats)
+    } else {
+      do.call(stats::density, c(list(x = bootstrap_stats),
+                                density_args))
+    }
+  }, error = function(e) {
+    stop("Please enter valid arguments for density function.")
+  })
+
 
   # Number of resample
   nres <- length(bootstrap_stats)
