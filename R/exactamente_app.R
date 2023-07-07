@@ -1,15 +1,34 @@
-#' Run the Exactamente Shiny App
+#' exactamente_app: Interactive Shiny App for Exploring Bootstrap Methods
 #'
-#' This function starts a Shiny app that lets the user interactively run
-#' bootstrap analysis using either exact or regular bootstrapping, or both.
+#' Launches a Shiny app to interactively explore and compare different bootstrap
+#' methods such as Exact Case, Exact, Regular, and All. The app provides a
+#' user-friendly interface, allowing users to modify various parameters associated
+#' with each bootstrap method, visualize the results, and understand the differences
+#' between the methods.
 #'
-#' @return Nothing; this function is called for its side effect of starting the
-#'   Shiny app.
 #' @export
+#'
+#' @return A shinyApp object representing the running Shiny application. This function
+#' is primarily called for its side effects, which include the launching and running
+#' of the Shiny app.
+#'
 #' @examples
 #' \dontrun{
-#' exactamento_app()
+#' # This example launches the Shiny application
+#' exactamente_app()
 #' }
+#'
+#'
+#' @seealso \url{https://shiny.rstudio.com/} for more information on Shiny applications.
+#' See also `exact_bootstrap()`, `ecase_bootstrap()`, and `reg_bootstrap()` for the
+#' individual bootstrap functions available in the exactamente package.
+#'
+#' @keywords interactive
+#'
+#' @note This function requires an active R session and depends on the shiny,
+#' shinythemes, and exactamente packages. Please ensure these are installed and loaded
+#' before calling this function.
+#'`
 exactamente_app <- function() {
 
   # User Interface
@@ -62,8 +81,8 @@ exactamente_app <- function() {
     })
 
     bootstrap_check <- shiny::reactive({
-      if(!is.wholenumber(input$n_bootstraps) || input$n_bootstraps < 1) {
-        return("Please enter a positive integer for number of bootstraps.")
+      if(!is.wholenumber(input$n_bootstraps) || input$n_bootstraps < 2) {
+        return("Please enter a positive integer greater than 1 for number of bootstraps.")
       } else {
         return(NULL)
       }

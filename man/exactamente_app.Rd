@@ -2,20 +2,39 @@
 % Please edit documentation in R/exactamente_app.R
 \name{exactamente_app}
 \alias{exactamente_app}
-\title{Run the Exactamente Shiny App}
+\title{exactamente_app: Interactive Shiny App for Exploring Bootstrap Methods}
 \usage{
 exactamente_app()
 }
 \value{
-Nothing; this function is called for its side effect of starting the
-Shiny app.
+A shinyApp object representing the running Shiny application. This function
+is primarily called for its side effects, which include the launching and running
+of the Shiny app.
 }
 \description{
-This function starts a Shiny app that lets the user interactively run
-bootstrap analysis using either exact or regular bootstrapping, or both.
+Launches a Shiny app to interactively explore and compare different bootstrap
+methods such as Exact Case, Exact, Regular, and All. The app provides a
+user-friendly interface, allowing users to modify various parameters associated
+with each bootstrap method, visualize the results, and understand the differences
+between the methods.
+}
+\note{
+This function requires an active R session and depends on the shiny,
+shinythemes, and exactamente packages. Please ensure these are installed and loaded
+before calling this function.
+`
 }
 \examples{
 \dontrun{
-exactamento_app()
+# This example launches the Shiny application
+exactamente_app()
 }
+
+
 }
+\seealso{
+\url{https://shiny.rstudio.com/} for more information on Shiny applications.
+See also \code{exact_bootstrap()}, \code{ecase_bootstrap()}, and \code{reg_bootstrap()} for the
+individual bootstrap functions available in the exactamente package.
+}
+\keyword{interactive}

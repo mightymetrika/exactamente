@@ -90,6 +90,9 @@ xboot_summary <- function(object){
   # Reorder columns
   summary_table <- summary_table[, c(8, 1:7)]
 
+  # Remove row names
+  rownames(summary_table) <- NULL
+
   # Return summary_table
   return(summary_table)
 }
