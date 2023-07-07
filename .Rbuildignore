@@ -1,3 +1,6 @@
 ^exactamente\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+^R/app\.R$
+
+^README\.Rmd$
