@@ -14,6 +14,7 @@ exactamente_app <- function() {
 
   # User Interface
   ui <- shiny::fluidPage(
+    theme = shinythemes::shinytheme("cerulean"),
     shiny::titlePanel("Explore Bootstrap Methods"),
     shiny::sidebarLayout(
       shiny::sidebarPanel(
@@ -33,11 +34,15 @@ exactamente_app <- function() {
         shiny::verbatimTextOutput("CI_warning")
       ),
       shiny::mainPanel(
+        shiny::uiOutput("table_title"),  # output for table title
         shiny::tableOutput("summary_table"),
+        shiny::uiOutput("plot_title"),  # output for plot title
         shiny::plotOutput("plot")
       )
     )
   )
+
+
 
   # Server logic
   server <- function(input, output) {
@@ -119,23 +124,35 @@ exactamente_app <- function() {
         result <- ecase_bootstrap(data, input$check_size, anon,
                                   input$lb, input$ub, density_args)
         output$summary_table <- shiny::renderTable(summary(result))
-        output$plot <- shiny::renderPlot(plot(result, "Exact Case Bootstrap Distribution"))
+        output$plot <- shiny::renderPlot(plot(result,""))
+        ptitle <- "Exact Case Bootstrap Distribution"
       } else if (input$method == "Exact") {
         result <- exact_bootstrap(data, input$check_size, anon,
                                   input$lb, input$ub, density_args)
         output$summary_table <- shiny::renderTable(summary(result))
-        output$plot <- shiny::renderPlot(plot(result, "Exact Bootstrap Distribution"))
+        output$plot <- shiny::renderPlot(plot(result, ""))
+        ptitle <- "Exact Bootstrap Distribution"
       } else if(input$method == "Regular") {
         result <- reg_bootstrap(data, input$n_bootstraps, anon, input$lb, input$ub,
                                 density_args)
         output$summary_table <- shiny::renderTable(summary(result))
-        output$plot <- shiny::renderPlot(plot(result, "Regular Bootstrap Distribution"))
+        output$plot <- shiny::renderPlot(plot(result, ""))
+        ptitle <- "Regular Bootstrap Distribution"
       } else if(input$method == "All") {
         result <- e_vs_r(data, input$n_bootstraps, input$check_size, anon,
-                         input$lb, input$ub, density_args)
+                         input$lb, input$ub, density_args, title = "")
         output$summary_table <- shiny::renderTable(result$summary_table)
         output$plot <- shiny::renderPlot(print(result$comp_plot))
+        ptitle <- "Comparison of Bootstrap Distributions"
       }
+
+      output$table_title <- shiny::renderUI({
+        shiny::h3("Bootstrap Method Summary", align = "left")
+      })
+
+      output$plot_title <- shiny::renderUI({
+        shiny::h3(ptitle, align = "left")
+      })
 
     })
   }

@@ -13,6 +13,7 @@
 #' @param lb Lower bound for the confidence interval. Defaults to 0.025.
 #' @param ub Upper bound for the confidence interval. Defaults to 0.975.
 #' @param density_args Pass additional arguments to stats::density
+#' @param title Plot title
 #'
 #' @return A list containing two items:
 #' - summary_table: A summary table containing the mode, median, mean,
@@ -27,7 +28,8 @@
 #' print(results$summary_table)
 #' print(results$comp_plot)
 e_vs_r <- function(data, n_bootstraps = 10000, check_size = TRUE,
-                   anon = function(x)(mean(x)), lb = 0.025, ub = 0.975, density_args) {
+                   anon = function(x)(mean(x)), lb = 0.025, ub = 0.975, density_args,
+                   title = "Comparison of Bootstrap Distributions") {
 
   # Run bootstrap functions
   ecase_result <- ecase_bootstrap(data, check_size, anon, lb = lb,
@@ -47,7 +49,7 @@ e_vs_r <- function(data, n_bootstraps = 10000, check_size = TRUE,
                                             "reg_bootstrap"))
 
   # Plot comparison
-  comp_plot <- compare_bootstrap(ecase_result, exact_result, reg_result)
+  comp_plot <- compare_bootstrap(ecase_result, exact_result, reg_result, title = title)
 
   # Store output in a list
   out <- list(summary_table = summary_table,

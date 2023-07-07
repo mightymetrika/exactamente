@@ -7,7 +7,8 @@
 compare_bootstrap(
   ecase_bootstrap_distribution,
   exact_bootstrap_distribution,
-  regular_bootstrap_distribution
+  regular_bootstrap_distribution,
+  title = "Comparison of Bootstrap Distributions"
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ the density estimate of the exact bootstrap sample statistic.}
 \code{reg_bootstrap()} with components dens$x (the coordinates of the points where
 the density is estimated) and y (the estimated density values), representing
 the density estimate of the regular bootstrap sample statistic.}
+
+\item{title}{Plot title}
 }
 \value{
 A ggplot object showing the density estimates of the exact and regular

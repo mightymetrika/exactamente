@@ -26,8 +26,12 @@ boot_plot <- function(dens, title = "Distribution") {
 
   p <- ggplot2::ggplot(df, ggplot2::aes(x = x, y = y)) +
     ggplot2::geom_line() +
-    ggplot2::labs(title = title, x = "Sample Stat", y = "Density") +
-    ggplot2::theme_minimal()
+    ggplot2::labs(x = "Sample Stat", y = "Density") +
+    ggplot2::theme_minimal() +
+    ggplot2::ggtitle(title) +
+    ggplot2::theme(plot.title = ggplot2::element_text(color = "#333333",
+                                                      size = 22.5, face = "plain",
+                                                      hjust = -0.05))
 
   return(p)
 }
