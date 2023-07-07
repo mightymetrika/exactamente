@@ -1,10 +1,29 @@
 Package: exactamente
-Title: What the Package Does (One Line, Title Case)
+Title: Explore Exact Bootstrap Methods
 Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Authors@R: c(
+    person("Mackson", "Ncube", , "macksonncube.stats@gmail.com", role = c("aut", "cre")),
+    person("mightymetrika, LLC", role = c("cph", "fnd"))
+  )
+Description: The `exactamente` package offers practical tools for exploring
+    bootstrap methods on small sample size data. The package includes functions
+    for implementing three distinct bootstrap methods: exact case bootstrap,
+    exact bootstrap, and regular bootstrap, which allow users to delve deeper
+    into the characteristics of their small datasets through unique resampling
+    techniques. The ecase_bootstrap() function implements the exact case
+    bootstrap method, while the exact_bootstrap() function applies the exact
+    bootstrap method. Both of these techniques, specifically designed for small
+    datasets, follow methodologies outlined in Jekel & Romero (2020) <doi:10.2172/1605343>.
+    The regular_bootstrap() function offers a more traditional bootstrap approach,
+    where users can determine the number of resamples. A distinctive feature of
+    `exactamente` is the e_vs_r() function, which allows users to directly compare
+    results from these three bootstrap methods. To augment user experience,
+    `exactamente` also includes the exactamente_app() function that launches an
+    interactive Shiny app. This app facilitates exploration and comparison of the
+    different bootstrap methods, providing options for modifying various parameters
+    and visualizing results. As such, the `exactamente` package serves to bridge
+    the gap between understanding statistical bootstrap methods and applying them
+    effectively to small datasets. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -30,3 +30,4 @@ distribution.
 \seealso{
 \code{\link{exact_bootstrap}}
 }
+\keyword{internal}
