@@ -33,7 +33,7 @@ before calling this function.
 
 }
 \seealso{
-\url{https://shiny.rstudio.com/} for more information on Shiny applications.
+\url{https://shiny.posit.co/} for more information on Shiny applications.
 See also \code{exact_bootstrap()}, \code{ecase_bootstrap()}, and \code{reg_bootstrap()} for the
 individual bootstrap functions available in the exactamente package.
 }

@@ -19,7 +19,7 @@
 #' }
 #'
 #'
-#' @seealso \url{https://shiny.rstudio.com/} for more information on Shiny applications.
+#' @seealso \url{https://shiny.posit.co/} for more information on Shiny applications.
 #' See also `exact_bootstrap()`, `ecase_bootstrap()`, and `reg_bootstrap()` for the
 #' individual bootstrap functions available in the exactamente package.
 #'

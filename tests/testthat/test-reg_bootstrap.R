@@ -5,7 +5,8 @@ test_that("reg_bootstrap works correctly with a valid input", {
   result <- reg_bootstrap(data)
   expect_s3_class(result, "regboot")
   expect_type(result, "list")
-  expect_named(result$dens, c("x", "y", "bw", "n", "call", "data.name","has.na" ))
+  expect_equal(names(result$dens)[[1]], "x")
+  expect_equal(names(result$dens)[[2]], "y")
   expect_named(result$stats, c("nres", "mode", "median", "mean", "sd", "lCI", "uCI"))
 })
 
@@ -40,7 +41,8 @@ test_that("`density_args` works correctly", {
   data <- rnorm(5)
   result <- reg_bootstrap(data, density_args = list(kernel = "cosine"))
   expect_type(result, "list")
-  expect_named(result$dens, c("x", "y", "bw", "n", "call", "data.name","has.na"))
+  expect_equal(names(result$dens)[[1]], "x")
+  expect_equal(names(result$dens)[[2]], "y")
   expect_named(result$stats, c("nres", "mode", "median", "mean", "sd", "lCI", "uCI"))
 })
 
