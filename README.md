@@ -35,6 +35,66 @@ the user can specify the desired number of resamples, allowing for
 direct comparison between the exact methods and conventional bootstrap
 techniques.
 
+Here is the the step-by-step process that the `exactamente` package
+functions use to perform their bootstrap resampling and compute the
+summary statistics and density estimates:
+
+1.  Bootstrap Resampling: Each bootstrap method starts by generating a
+    collection of bootstrap samples, also known as resamples.
+
+- For ecase_bootstrap(), the function generates all possible (2N - 1)
+  choose N resamples, treating permutations as identical.
+- For exact_bootstrap(), the function generates N^N resamples, where
+  each different permutation is treated as a unique resample.
+- For reg_bootstrap(), the function generates a user-specified number of
+  resamples by sampling with replacement from the original sample.
+
+2.  Compute the Resample Statistics: For each resample, the function
+    computes a statistic of interest, such as the mean or the median.
+    The function uses the user-specified `anon` function for this
+    computation. The `anon` function defaults to the mean if not
+    specified by the user.
+
+3.  Process Bootstrap Statistics: This is a common process for all three
+    methods. After generating the resample statistics, each function
+    calls process_bootstrap_stats() to derive the summary statistics and
+    density estimates.
+
+4.  Density Estimation: In process_bootstrap_stats(), it first
+    calculates the kernel density estimate of the bootstrap statistics
+    using the stats::density() function. If user-specified
+    `density_args` are provided, those are passed to the density
+    function. The density estimate provides a smoothed representation of
+    the distribution of the bootstrap statistics.
+
+5.  Summary Statistics: After generating the density estimate,
+    process_bootstrap_stats() computes various summary statistics for
+    the bootstrap statistics:
+
+- The total number of resamples (nres).
+- The mode, defined as the value with the highest frequency in the
+  bootstrap statistics.
+- The median, defined as the middle value when the bootstrap statistics
+  are sorted.
+- The mean, defined as the average of the bootstrap statistics.
+- The standard deviation, which measures the dispersion of the bootstrap
+  statistics.
+- The lower and upper bootstrap confidence interval (lCI and uCI),
+  defined by the user-specified percentiles (`lb` and `ub`). The default
+  is the 2.5th percentile and the 97.5th percentile, giving a 95%
+  confidence interval.
+
+6.  Return Result: Lastly, process_bootstrap_stats() returns a list
+    containing the density estimate and the summary statistics. The
+    bootstrap function then assigns a specific class to the result
+    (`ecboot`, `extboot`, or `regboot`) and returns the result to the
+    user.
+
+By providing these detailed outputs, the `exactamente` package enables
+users to thoroughly investigate the characteristics of the bootstrap
+distribution and the behavior of the bootstrap estimator under different
+resampling methods.
+
 ## Installation
 
 You can install the development version of `exactamente` from GitHub
@@ -75,7 +135,7 @@ set.seed(183)
 r_res <- reg_bootstrap(data)
 ```
 
-Each \_bootstrap function comes with plot and summary methods for
+Each \_bootstrap function comes with plot() and summary() methods for
 further investigation of the bootstrap results.
 
 ``` r
@@ -112,8 +172,8 @@ lapply(res, summary)
 #> 1 reg_bootstrap 10000 3.335788 3.333333 3.3368 1.518024   1   7
 ```
 
-`exactamente` also includes the `e_vs_r()` function, which enables
-direct comparison between the three methods using the same data set.
+`exactamente` also includes the e_vs_r() function, which enables direct
+comparison between the three methods using the same data set.
 
 ``` r
 set.seed(183)
