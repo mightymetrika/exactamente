@@ -209,5 +209,16 @@ exactamente_app <- function() {
 }
 
 is.wholenumber <- function(x) {
-  x == as.integer(x)
+  # Check if input is numeric (or can be coerced to numeric)
+  if (!is.numeric(x)) {
+    stop("Input must be numeric.")
+  }
+
+  # Check if input is missing (NA)
+  if (any(is.na(x))) {
+    return(FALSE)
+  }
+
+  # Check if input is a whole number
+  return(all(x == floor(x)))
 }
