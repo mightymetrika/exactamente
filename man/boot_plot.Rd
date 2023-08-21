@@ -7,7 +7,7 @@
 boot_plot(dens, title = "Distribution")
 }
 \arguments{
-\item{dens}{An object of class \code{ecboot}, \code{exboot}, or \code{regboot}}
+\item{dens}{An object of class 'exboot', or 'regboot'}
 
 \item{title}{A plot title}
 }
@@ -18,14 +18,6 @@ statistic.
 \description{
 Generates a plot of the density estimates of a bootstrap
 distribution.
-}
-\examples{
-\dontrun{
-#set.seed(123)
-#data <- rnorm(5)
-#result <- exact_bootstrap(data)
-#boot_plot(result)
-}
 }
 \seealso{
 \code{\link{exact_bootstrap}}

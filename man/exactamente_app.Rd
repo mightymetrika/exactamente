@@ -12,11 +12,10 @@ is primarily called for its side effects, which include the launching and runnin
 of the Shiny app.
 }
 \description{
-Launches a Shiny app to interactively explore and compare different bootstrap
-methods such as Exact Case, Exact, Regular, and All. The app provides a
-user-friendly interface, allowing users to modify various parameters associated
-with each bootstrap method, visualize the results, and understand the differences
-between the methods.
+Launches a Shiny app to interactively explore and compare Exact and Regular
+bootstrap methods and All. The app provides a user-friendly interface, allowing
+users to modify various parameters associated with each bootstrap method,
+visualize the results, and understand the differences between the methods.
 }
 \note{
 This function requires an active R session and depends on the shiny,
@@ -25,8 +24,7 @@ before calling this function.
 `
 }
 \examples{
-\dontrun{
-# This example launches the Shiny application
+if(interactive()){
 #exactamente_app()
 }
 
@@ -34,7 +32,7 @@ before calling this function.
 }
 \seealso{
 \url{https://shiny.posit.co/} for more information on Shiny applications.
-See also \code{exact_bootstrap()}, \code{ecase_bootstrap()}, and \code{reg_bootstrap()} for the
+See also exact_bootstrap() and reg_bootstrap() for the
 individual bootstrap functions available in the exactamente package.
 }
 \keyword{interactive}

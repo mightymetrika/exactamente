@@ -1,26 +1,18 @@
 #' @title Plot Bootstrap Distributions
 #' @description Generates a plot of the density estimates of a bootstrap
 #' distribution.
-#' @param dens An object of class `ecboot`, `exboot`, or `regboot`
+#' @param dens An object of class 'exboot', or 'regboot'
 #' @param title A plot title
 #' @return A ggplot object showing the density estimates of a bootstrap sample
 #' statistic.
-#' @examples
-#' \dontrun{
-#' #set.seed(123)
-#' #data <- rnorm(5)
-#' #result <- exact_bootstrap(data)
-#' #boot_plot(result)
-#' }
 #' @seealso \code{\link{exact_bootstrap}}
 #' @keywords internal
 boot_plot <- function(dens, title = "Distribution") {
   if(methods::is(dens$dens)[[1]] != "density")
     stop("dens$dens must be an object of class density.")
 
-  if(!(methods::is(dens) == "extboot" || methods::is(dens) == "regboot" ||
-       methods::is(dens) == "ecboot"))
-    stop("dens must be an object of class extboot, regboot, or ecboot")
+  if(!(methods::is(dens) == "extboot" || methods::is(dens) == "regboot"))
+    stop("dens must be an object of class extboot or regboot")
 
   df <- data.frame(x = dens$dens$x,
                    y = dens$dens$y)

@@ -1,10 +1,9 @@
 #' exactamente_app: Interactive Shiny App for Exploring Bootstrap Methods
 #'
-#' Launches a Shiny app to interactively explore and compare different bootstrap
-#' methods such as Exact Case, Exact, Regular, and All. The app provides a
-#' user-friendly interface, allowing users to modify various parameters associated
-#' with each bootstrap method, visualize the results, and understand the differences
-#' between the methods.
+#' Launches a Shiny app to interactively explore and compare Exact and Regular
+#' bootstrap methods and All. The app provides a user-friendly interface, allowing
+#' users to modify various parameters associated with each bootstrap method,
+#' visualize the results, and understand the differences between the methods.
 #'
 #' @export
 #'
@@ -13,14 +12,13 @@
 #' of the Shiny app.
 #'
 #' @examples
-#' \dontrun{
-#' # This example launches the Shiny application
+#' if(interactive()){
 #' #exactamente_app()
 #' }
 #'
 #'
 #' @seealso \url{https://shiny.posit.co/} for more information on Shiny applications.
-#' See also `exact_bootstrap()`, `ecase_bootstrap()`, and `reg_bootstrap()` for the
+#' See also exact_bootstrap() and reg_bootstrap() for the
 #' individual bootstrap functions available in the exactamente package.
 #'
 #' @keywords interactive
@@ -37,8 +35,6 @@ exactamente_app <- function() {
     shiny::titlePanel("Explore Bootstrap Methods"),
     shiny::sidebarLayout(
       shiny::sidebarPanel(
-        shiny::radioButtons("method", "Choose method:",
-                            c("Exact Case", "Exact", "Regular", "All")),
         shiny::numericInput("n_bootstraps", "Number of bootstraps:", value = 10000, min = 1),
         shiny::textAreaInput("data", "Enter data (numeric vector):", "rnorm(5)"),
         shiny::checkboxInput("check_size", "Check size:", value = TRUE),
@@ -60,8 +56,6 @@ exactamente_app <- function() {
       )
     )
   )
-
-
 
   # Server logic
   server <- function(input, output) {
@@ -111,7 +105,6 @@ exactamente_app <- function() {
       }
     })
 
-
     CI_check <- shiny::reactive({
       if(!is.numeric(input$lb) || !is.numeric(input$ub) || input$lb < 0 || input$ub > 1 || input$lb >= input$ub) {
         return("Please enter valid values for CI bounds (lb < ub, both between 0 and 1).")
@@ -150,55 +143,23 @@ exactamente_app <- function() {
       }
       density_args <- eval(parse(text = paste0("list(", input$density_args, ")")))
 
-      #Run chosen method and generate outputs
-      if(input$method == "Exact Case") {
-        shiny::validate(
-          shiny::need(tryCatch({
-            result <- ecase_bootstrap(data, input$check_size, anon,
-                                      input$lb, input$ub, density_args)
-          }, error = function(e) e$message), "An error occurred.")
-        )
-        output$summary_table <- shiny::renderTable(summary(result))
-        output$plot <- shiny::renderPlot(plot(result,""))
-        ptitle <- "Exact Case Bootstrap Distribution"
-      } else if (input$method == "Exact") {
-        shiny::validate(
-          shiny::need(tryCatch({
-            result <- exact_bootstrap(data, input$check_size, anon,
-                                      input$lb, input$ub, density_args)
-          }, error = function(e) e$message), "An error occurred.")
-        )
-        output$summary_table <- shiny::renderTable(summary(result))
-        output$plot <- shiny::renderPlot(plot(result, ""))
-        ptitle <- "Exact Bootstrap Distribution"
-      } else if(input$method == "Regular") {
-        shiny::validate(
-          shiny::need(tryCatch({
-            result <- reg_bootstrap(data, input$n_bootstraps, anon, input$lb, input$ub,
-                                    density_args)
-          }, error = function(e) e$message), "An error occurred.")
-        )
-        output$summary_table <- shiny::renderTable(summary(result))
-        output$plot <- shiny::renderPlot(plot(result, ""))
-        ptitle <- "Regular Bootstrap Distribution"
-      } else if(input$method == "All") {
-        shiny::validate(
-          shiny::need(tryCatch({
-            result <- e_vs_r(data, input$n_bootstraps, input$check_size, anon,
-                             input$lb, input$ub, density_args, title = "")
-          }, error = function(e) e$message), "An error occurred.")
-        )
-        output$summary_table <- shiny::renderTable(result$summary_table)
-        output$plot <- shiny::renderPlot(print(result$comp_plot))
-        ptitle <- "Comparison of Bootstrap Distributions"
-      }
+      # Run both "Exact" and "Regular" methods
+      shiny::validate(
+        shiny::need(tryCatch({
+          result <- e_vs_r(data, input$n_bootstraps, input$check_size, anon,
+                           input$lb, input$ub, density_args, title = "")
+        }, error = function(e) e$message), "An error occurred.")
+      )
+
+      output$summary_table <- shiny::renderTable(result$summary_table)
+      output$plot <- shiny::renderPlot(print(result$comp_plot))
 
       output$table_title <- shiny::renderUI({
         shiny::h3("Bootstrap Method Summary", align = "left")
       })
 
       output$plot_title <- shiny::renderUI({
-        shiny::h3(ptitle, align = "left")
+        shiny::h3("Comparison of Bootstrap Distributions", align = "left")
       })
 
     })

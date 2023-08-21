@@ -5,25 +5,19 @@
 \title{Compare Bootstrap Distributions}
 \usage{
 compare_bootstrap(
-  ecase_bootstrap_distribution,
   exact_bootstrap_distribution,
   regular_bootstrap_distribution,
   title = "Comparison of Bootstrap Distributions"
 )
 }
 \arguments{
-\item{ecase_bootstrap_distribution}{An named list returned from
-\code{ecase_bootstrap()} with components dens$x (the coordinates of the points where
-the density is estimated) and y (the estimated density values), representing
-the density estimate of the exact case bootstrap sample statistic.}
-
 \item{exact_bootstrap_distribution}{An named list returned from
-\code{exact_bootstrap()} with components dens$x (the coordinates of the points where
+exact_bootstrap() with components dens$x (the coordinates of the points where
 the density is estimated) and y (the estimated density values), representing
 the density estimate of the exact bootstrap sample statistic.}
 
 \item{regular_bootstrap_distribution}{An named list returned from
-\code{reg_bootstrap()} with components dens$x (the coordinates of the points where
+reg_bootstrap() with components dens$x (the coordinates of the points where
 the density is estimated) and y (the estimated density values), representing
 the density estimate of the regular bootstrap sample statistic.}
 
@@ -41,10 +35,8 @@ and regular bootstrap distributions.
 \examples{
 set.seed(123)
 data <- rnorm(5)
-ecase_bootstrap_results <- ecase_bootstrap(data)
 exact_bootstrap_result <- exact_bootstrap(data)
 regular_bootstrap_result <- reg_bootstrap(data)
-compare_bootstrap(ecase_bootstrap_results,
-                  exact_bootstrap_result,
+compare_bootstrap(exact_bootstrap_result,
                   regular_bootstrap_result)
 }

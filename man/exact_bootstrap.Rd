@@ -42,7 +42,7 @@ bootstrapping where the total number of combinations is expressed as N^N
 (i.e., the vector c(1 ,2, 7) has 3^3 = 27 combinations rather than the 10
 combinations obtained from exact case bootstrapping), giving more weight to a
 resample with larger variation, thus potentially increasing the bootstrap
-estimate's accuracy. This technique is described in Jekel and Romero (2020).
+estimate's accuracy. This technique is described in Kisielinska (2013).
 }
 \examples{
 set.seed(123)
@@ -52,7 +52,7 @@ summary(result)
 plot(result)
 }
 \references{
-Jekel, C. F., & Romero, V. J. (2020). Conservative Estimation of Tail Probabilities from Limited Sample Data. \doi{https://doi.org/10.2172/1605343}
+Kisielinska, J. (2013). The exact bootstrap method shown on the example of the mean and variance estimation. Computational Statistics, 28, 1061–1077. \doi{https://doi.org/10.1007/s00180-012-0350-0}
 }
 \seealso{
 \code{\link{plot.extboot}}, \code{\link{summary.extboot}}
