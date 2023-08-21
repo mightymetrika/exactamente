@@ -97,13 +97,6 @@ resampling methods.
 
 ## Installation
 
-You can install the released version of `exactamente` from
-[CRAN](https://CRAN.R-project.org) with:
-
-``` r
-install.packages("exactamente")
-```
-
 You can install the development version of `exactamente` from GitHub
 like so:
 
@@ -152,17 +145,17 @@ lapply(res, plot)
 #> [[1]]
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
     #> 
     #> [[2]]
 
-<img src="man/figures/README-unnamed-chunk-6-2.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-2.png" width="100%" />
 
     #> 
     #> [[3]]
 
-<img src="man/figures/README-unnamed-chunk-6-3.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-3.png" width="100%" />
 
 ``` r
 lapply(res, summary)
@@ -188,7 +181,7 @@ comp_res <- e_vs_r(data)
 comp_res$comp_plot
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
 ``` r
 comp_res$summary_table
