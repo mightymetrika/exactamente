@@ -81,8 +81,6 @@ xboot_summary <- function(object){
   # Set Method variable
   if (methods::is(object) == "extboot"){
     summary_table$Method <- "exact_bootstrap"
-  } else if (methods::is(object) == "ecboot"){
-    summary_table$Method <- "ecase_bootstrap"
   } else {
     summary_table$Method <- "reg_bootstrap"
   }
@@ -96,5 +94,3 @@ xboot_summary <- function(object){
   # Return summary_table
   return(summary_table)
 }
-
-

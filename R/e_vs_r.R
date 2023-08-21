@@ -1,6 +1,6 @@
-#' Compare Exact Case Bootstrap vs Exact Bootstrap vs Regular Bootstrap
+#' Compare Exact Bootstrap vs Regular Bootstrap
 #'
-#' This function runs the exact case, exact, and regular bootstrap functions on
+#' This function runs the exact and regular bootstrap functions on
 #' a dataset, summarizes the results, and provides a comparative plot. It provides
 #' a convenient way to compare these two methods of bootstrapping.
 #'
@@ -32,24 +32,20 @@ e_vs_r <- function(data, n_bootstraps = 10000, check_size = TRUE,
                    title = "Comparison of Bootstrap Distributions") {
 
   # Run bootstrap functions
-  ecase_result <- ecase_bootstrap(data, check_size, anon, lb = lb,
-                                  ub = ub, density_args)
   exact_result <- exact_bootstrap(data, check_size, anon, lb = lb,
                                   ub = ub, density_args)
   reg_result <- reg_bootstrap(data, n_bootstraps, anon, lb = lb, ub = ub, density_args)
 
   # Create summary table
-  summary_table <- rbind(xboot_summary(ecase_result),
-                         xboot_summary(exact_result),
+  summary_table <- rbind(xboot_summary(exact_result),
                          xboot_summary(reg_result))
 
   summary_table$Method <- factor(summary_table$Method,
-                                 levels = c("ecase_bootstrap",
-                                            "exact_bootstrap",
+                                 levels = c("exact_bootstrap",
                                             "reg_bootstrap"))
 
   # Plot comparison
-  comp_plot <- compare_bootstrap(ecase_result, exact_result, reg_result, title = title)
+  comp_plot <- compare_bootstrap(exact_result, reg_result, title = title)
 
   # Store output in a list
   out <- list(summary_table = summary_table,

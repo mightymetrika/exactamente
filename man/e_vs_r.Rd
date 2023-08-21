@@ -2,7 +2,7 @@
 % Please edit documentation in R/e_vs_r.R
 \name{e_vs_r}
 \alias{e_vs_r}
-\title{Compare Exact Case Bootstrap vs Exact Bootstrap vs Regular Bootstrap}
+\title{Compare Exact Bootstrap vs Regular Bootstrap}
 \usage{
 e_vs_r(
   data,
@@ -43,7 +43,7 @@ standard deviation, and confidence interval for each bootstrap method.
 }
 }
 \description{
-This function runs the exact case, exact, and regular bootstrap functions on
+This function runs the exact and regular bootstrap functions on
 a dataset, summarizes the results, and provides a comparative plot. It provides
 a convenient way to compare these two methods of bootstrapping.
 }
