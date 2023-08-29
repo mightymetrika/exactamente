@@ -13,20 +13,8 @@
 #'
 #' @examples
 #' if(interactive()){
-#' #exactamente_app()
+#'   exactamente_app()
 #' }
-#'
-#'
-#' @seealso \url{https://shiny.posit.co/} for more information on Shiny applications.
-#' See also exact_bootstrap() and reg_bootstrap() for the
-#' individual bootstrap functions available in the exactamente package.
-#'
-#' @keywords interactive
-#'
-#' @note This function requires an active R session and depends on the shiny,
-#' shinythemes, and exactamente packages. Please ensure these are installed and loaded
-#' before calling this function.
-#'`
 exactamente_app <- function() {
 
   # User Interface

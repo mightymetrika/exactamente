@@ -61,7 +61,14 @@ By providing these detailed outputs, the 'exactamente' package enables users to 
 
 ## Installation
 
-You can install the development version of `exactamente` from GitHub like so:
+You can install the released version of 'exactamente' from [CRAN](https://CRAN.R-project.org):
+
+```{r eval=FALSE}
+install.packages("exactamente")
+```
+
+
+You can install the development version of 'exactamente' from GitHub like so:
 
 ``` {r, eval=FALSE}
 # install.packages("devtools")
