@@ -18,8 +18,8 @@ method is advantageous for bootstrapping small data sets where standard
 methods might be inadequate.
 
 For a given sample size N, the exact bootstrap generates all N^N
-resamples, including permutations such as \[1, 1, 2\], \[1, 2, 1\], and
-\[2, 1, 1\] as distinct resamples.
+resamples, including permutations such as \[5, 5, 3\], \[5, 3, 5\], and
+\[3, 5, 5\] as distinct resamples.
 
 Furthermore, ‘exactamente’ provides a standard bootstrap function where
 the user can specify the desired number of resamples, allowing for
